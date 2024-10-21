@@ -1,7 +1,66 @@
-#divA {
+#cw1 {
   color: red;
-  background-color: green;
-  width: 200px;
-  height: 100px;
+}
+
+#cw2 {
+  color: green;
+}
+
+#cw3 {
+  color: blueviolet;
+}
+
+#author {
+  color: orangered;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid black;
+  padding: 8px;
   text-align: center;
+}
+
+#kwadrat1 {
+  height: 100px;
+  width: 100px;
+  background-color: burlywood;
+}
+
+#kwadrat2 {
+  height: 100px;
+  width: 100px;
+  background-color: green;
+}
+
+#kwadrat3 {
+  height: 100px;
+  width: 100px;
+  background-color: blue;
+}
+
+#kwadrat4 {
+  height: 100px;
+  width: 100px;
+  background-color: yellow;
+}
+
+#kwadrat5 {
+  height: 100px;
+  width: 100px;
+  background-color: purple;
+}
+
+.wiersz1 {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+.wiersz2 {
+  display: flex;
+  gap: 30px;
 }
