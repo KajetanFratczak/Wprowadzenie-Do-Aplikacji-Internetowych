@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .test {
+        background-color: red;
+        color: black;
+        font-size: 30px;
+        padding: 40px;
+        width: 200px;
+        height: 200px;
+        border: solid black 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="parent"></div>
+
+    <button id="bt">Kliknij mnie</button>
+
+    <script>
+      const el = document.getElementById("parent");
+      const bt = document.getElementById("bt");
+      bt.addEventListener("click", (e) => {
+        const new_child = document.createElement("div");
+        new_child.classList = "test";
+        el.appendChild(new_child);
+      });
+
+      //   for (let i = 0; i < 10; i++) {
+      //     const new_child = document.createElement("div");
+      //     new_child.classList = "test";
+      //     el.appendChild(new_child);
+      //   }
+
+      //   setTimeout(() => {
+      //     el.innerHTML = "Hello";
+      //   }, 2000);
+
+      //   el.innerHTML = "<b>Nadpisze to</b>";
+      //   el.innerText = "Hello";
+
+      //   el.style.color = "brown";
+      //   el.style.backgroundColor = "orange";
+
+      //   console.log("Hello");
+    </script>
+  </body>
+</html>
