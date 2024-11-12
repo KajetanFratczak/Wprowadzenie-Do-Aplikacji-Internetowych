@@ -25,7 +25,50 @@
         </ul>
       </nav>
     </header>
-    <main>Main</main>
+    <main>
+      <div class="gallery-header">
+        <h1>Go One More</h1>
+      </div>
+
+      <div class="row_gallery"> 
+        <div class="column_gallery">
+          <img src="5.jpg" style="width:100%">
+          </div>
+        <div class="column_gallery">
+          <img src="6.jpg" style="width:100%">
+          </div>
+        <div class="column_gallery">
+          <img src="4.jpg" style="width:100%">
+          </div>
+      </div>  
+      <div class="row_gallery"> 
+        <div class="column_gallery">
+          <img src="7.jpg" style="width:100%">
+          </div>
+        <div class="column_gallery">
+          <img src="8.jpg" style="width:100%">
+          </div>
+        <div class="column_gallery">
+          <img src="9.jpg" style="width:100%">
+          </div>
+      </div>  
+
+      <div class="video_container">
+        <video id="video1" src="uginanie_ramion_z_hantlami_z_rotacja.mp4" style="width:100%"></video>
+        <button onclick="playPause()" class="video_button">Play/Pause</button>
+      </div>
+
+      <script> 
+        var myVideo = document.getElementById("video1"); 
+        function playPause() 
+        { 
+          if (myVideo.paused) 
+            myVideo.play(); 
+          else 
+            myVideo.pause(); 
+        } 
+      </script> 
+    </main>
     <footer>Kajetan Frątczak</footer>
   </body>
 </html>

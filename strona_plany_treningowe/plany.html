@@ -11,7 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Plany treningowe</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="./script.js"></script>
+    <script src="./script.js" defer></script>
+    <script src="./cwiczenia.js" defer></script>
   </head>
 
   <body>
@@ -25,7 +26,25 @@
         </ul>
       </nav>
     </header>
-    <main>Main</main>
+    <main id="main-plany">
+      <h1>Generator planu treningowego</h1>
+      <form id="plan_generator">
+        <label for="poziom_zaaw">Poziom zaawansowania</label>
+        <select id="poziom_zaaw" name="poziom_zaaw">
+          <option value="poczatkujacy">Początkujący</option>
+          <option value="srednio_zaawansowany">Średnio zaawansowany</option>
+          <option value="zaawansowany">Zaawansowany</option>
+        </select>
+
+        <label for="cel">Cel</label>
+        <select id="cel" name="cel">
+          <option value="sila">Siła</option>
+          <option value="wytrzymalosc">Wytrzymałość</option>
+        </select>
+
+        <button type="button" onclick="generatePlan()">Generuj Plan</button>
+      </form>
+    </main>
     <footer>Kajetan Frątczak</footer>
   </body>
 </html>
