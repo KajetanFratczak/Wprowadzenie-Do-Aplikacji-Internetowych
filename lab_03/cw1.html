@@ -13,16 +13,24 @@
     <button id="reset">Reset</button>
 
     <script>
-        let elapsedTime = 0;
+        let seconds = 0;
         let timerInterval;
         let timerRunning = false;
+
+        // Funkcja formatująca czas w minuty i sekundy
+        function formatTime(secs) 
+        {
+            const minutes = Math.floor(secs / 60);
+            const remaining_seconds = secs % 60;
+            return minutes > 0 ? `${minutes}min ${remaining_seconds}s` : `${remaining_seconds}s`;
+        }
 
         function start_timer() 
         {   if(!timerRunning) 
             {     timerInterval = setInterval(() => 
                 {       
-                    elapsedTime++; 
-                    document.getElementById("stopwatch").textContent = elapsedTime;    
+                    seconds++; 
+                    document.getElementById("stopwatch").textContent = formatTime(seconds);    
                 }, 1000);     
                 timerRunning = true;   
             } 
@@ -36,7 +44,8 @@
         
         function reset_timer() 
         {   
-            elapsedTime = 0; 
+            seconds = 0; 
+            document.getElementById("stopwatch").textContent = formatTime(seconds);    
         }
 
         document.getElementById("start").addEventListener("click", start_timer);
