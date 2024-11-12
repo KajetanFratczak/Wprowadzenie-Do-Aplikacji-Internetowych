@@ -13,38 +13,35 @@
     <button id="reset">Reset</button>
 
     <script>
-        let timer;
-        let seconds = 0;
+        let elapsedTime = 0;
+        let timerInterval;
+        let timerRunning = false;
 
-        function formatTime(secs) {
-            const minutes = Math.floor(secs / 60);
-            const remainingSeconds = secs % 60;
-            return minutes > 0 ? `${minutes}min ${remainingSeconds}s` : `${remainingSeconds}s`;
+        function start_timer() 
+        {   if(!timerRunning) 
+            {     timerInterval = setInterval(() => 
+                {       
+                    elapsedTime++; 
+                    document.getElementById("stopwatch").textContent = elapsedTime;    
+                }, 1000);     
+                timerRunning = true;   
+            } 
         }
 
-        function startTimer() {
-            if (!timer) {
-                timer = setInterval(() => {
-                    seconds++;
-                    document.getElementById("stopwatch").textContent = formatTime(seconds);
-                }, 1000);
-            }
+        function stop_timer() 
+        {   
+            clearInterval(timerInterval);   
+            timerRunning = false; 
+        }
+        
+        function reset_timer() 
+        {   
+            elapsedTime = 0; 
         }
 
-        function stopTimer() {
-            clearInterval(timer);
-            timer = null;
-        }
-
-        function resetTimer() {
-            stopTimer();
-            seconds = 0;
-            document.getElementById("stopwatch").textContent = "0s";
-        }
-
-        document.getElementById("start").addEventListener("click", startTimer);
-        document.getElementById("stop").addEventListener("click", stopTimer);
-        document.getElementById("reset").addEventListener("click", resetTimer);
+        document.getElementById("start").addEventListener("click", start_timer);
+        document.getElementById("stop").addEventListener("click", stop_timer);
+        document.getElementById("reset").addEventListener("click", reset_timer);
     </script>
   </body>
 </html>
