@@ -4,11 +4,68 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ćwiczenie 3 -  Pobieranie i wyświetlenie danych z API</title>
+    <style>
+        .product-img 
+        {
+          width: 100px; /* Zmniejsz szerokość obrazu */
+          height: auto; /* Ustaw automatyczną wysokość, aby zachować proporcje */
+        }
+        table, th, td 
+        {
+          border: 1px solid #ccc;
+          border-collapse: collapse;
+          padding: 10px;
+        }
+      </style>
   </head>
 
   <body>
-    <script>
-        
+    <table id="products_div">
+        <thead>
+          <tr>
+            <th>Zdjęcie</th>
+            <th>Tytuł</th>
+            <th>Opis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Produkty zostaną dodane tutaj przez JavaScript -->
+        </tbody>
+
+    <script> 
+        fetch(`https://dummyjson.com/products`)
+            .then((res) => res.json())
+            .then((data) =>{
+                const T = data.products
+                let count = 0;
+
+                console.log(T)
+
+                T.forEach((element) => {
+                    if (count >= 30) return;
+
+                    const row = document.createElement("tr");
+
+                    const img_cell = document.createElement("td");
+                    const product_img = document.createElement("img");
+                    product_img.classList.add("product-img");
+                    product_img.src = element.images;
+                    img_cell.appendChild(product_img);
+                    row.appendChild(img_cell);
+
+                    const title_cell = document.createElement("td");
+                    title_cell.innerHTML = element.title;
+                    row.appendChild(title_cell);
+
+                    const desc_cell = document.createElement("td");
+                    desc_cell.innerHTML = element.description;
+                    row.appendChild(desc_cell);  
+                    
+                    products_div.appendChild(row);
+
+                    count++;
+                });
+            })
     </script>
   </body>
 </html>
