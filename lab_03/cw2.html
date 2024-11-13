@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ćwiczenie 2 - Generator haseł</title>
+  </head>
+
+  <body>
+    <label for="min_dl">Minmalna długość hasła:</label>
+    <input type="text" id="min_dl" name="min_dl">
+    <label for="max_dl">Maksymalna długość hasła:</label>
+    <input type="text" id="max_dl" name="max_dl">
+
+    <input type="checkbox" id="big_letters" name="big_letters" value="yes">
+    <label for="big_letters">Czy hasło ma zawierać wielkie litery?</label><br>    
+    <input type="checkbox" id="special_chars" name="special_chars" value="yes">
+    <label for="special_chars">Czy hasło ma zawierać znaki specjalne?</label><br>
+
+    <button id="generator_hasel">Wygeneruj hasło</button>
+    <script>
+        function generator() 
+        {
+            const min_dl = parseInt(document.getElementById("min_dl").value);
+            const max_dl = parseInt(document.getElementById("max_dl").value);
+            const include_uppercase = document.getElementById("big_letters").checked;
+            const include_special_chars = document.getElementById("special_chars").checked;
+
+            let haslo = "";
+
+            const num = "1234567890";
+            const special_char = "!@#$%&'()*+,^-./:;<=>?[]_`{~}|";
+            const lower_case = "abcdefghijklmnopqrstuvwxyz";
+            const upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const literki = num + lower_case;
+
+            if (include_uppercase)
+            {
+                const random_index = Math.floor(Math.random() * upper_case.length);
+                haslo += upper_case[random_index];
+            }
+
+            if (include_special_chars)
+            {
+                const random_index = Math.floor(Math.random() * special_char.length);
+                haslo += special_char[random_index];
+            }
+
+            let pom1 = include_uppercase ? 1 : 0;
+            let pom2 = include_special_chars ? 1 : 0;
+
+            // dodajemy brakujace litery oraz cyfry i shufflujemy haslo
+            for(let i=0; i<Math.floor(Math.random() * (max_dl - min_dl + 1 - pom1 - pom2)) + min_dl; i++)
+            {
+                const random_index = Math.floor(Math.random() * literki.length);
+                haslo += literki[random_index]
+            }
+
+            haslo = haslo.split('');
+            for (let i = haslo.length - 1; i > 0; i--) 
+            {
+                const swap_index = Math.floor(Math.random() * (i + 1));
+                const temp = haslo[i];
+                haslo[i] = haslo[swap_index];
+                haslo[swap_index] = temp;
+            }
+            haslo = haslo.join('');
+
+            alert(haslo);
+        } 
+
+        document.getElementById("generator_hasel").addEventListener("click", generator);
+    </script>
+  </body>
+</html>
