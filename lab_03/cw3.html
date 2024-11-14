@@ -20,6 +20,18 @@
   </head>
 
   <body>
+    <label for="filter">Filtruj:</label>
+    <input type="text" id="filter" placeholder="Wpisz filtr...">
+
+    <label for="options">Posortuj:</label>
+    <select name="options" id="options">
+      <option value="rosnaco">Rosnąco</option>
+      <option value="malejaco">Malejąco</option>
+      <option value="oryginal">Oryginalna kolejność</option>
+    </select>
+    <input type="submit" value="Zastosuj" onclick="applyFilters()">
+
+
     <table id="products_div">
         <thead>
           <tr>
@@ -31,41 +43,64 @@
         <tbody>
           <!-- Produkty zostaną dodane tutaj przez JavaScript -->
         </tbody>
+    </table>
 
     <script> 
-        fetch(`https://dummyjson.com/products`)
-            .then((res) => res.json())
-            .then((data) =>{
-                const T = data.products
-                let count = 0;
+      let original_products = []; 
 
-                console.log(T)
+      fetch(`https://dummyjson.com/products`)
+          .then((res) => res.json())
+          .then((data) => {
+            original_products = data.products.slice(0, 30);
+              displayProducts(original_products);
+          });
 
-                T.forEach((element) => {
-                    if (count >= 30) return;
+      function displayProducts(products) 
+      {
+          const tbody = document.querySelector("#products_div tbody");
+          tbody.innerHTML = ""; 
 
-                    const row = document.createElement("tr");
+          products.forEach((element) => {
+              const row = document.createElement("tr");
 
-                    const img_cell = document.createElement("td");
-                    const product_img = document.createElement("img");
-                    product_img.classList.add("product-img");
-                    product_img.src = element.images;
-                    img_cell.appendChild(product_img);
-                    row.appendChild(img_cell);
+              const img_cell = document.createElement("td");
+              const product_img = document.createElement("img");
+              product_img.classList.add("product-img");
+              product_img.src = element.images[0]; 
+              img_cell.appendChild(product_img);
+              row.appendChild(img_cell);
 
-                    const title_cell = document.createElement("td");
-                    title_cell.innerHTML = element.title;
-                    row.appendChild(title_cell);
+              const title_cell = document.createElement("td");
+              title_cell.innerHTML = element.title;
+              row.appendChild(title_cell);
 
-                    const desc_cell = document.createElement("td");
-                    desc_cell.innerHTML = element.description;
-                    row.appendChild(desc_cell);  
-                    
-                    products_div.appendChild(row);
+              const desc_cell = document.createElement("td");
+              desc_cell.innerHTML = element.description;
+              row.appendChild(desc_cell);  
+              
+              tbody.appendChild(row);
+          });
+      }
 
-                    count++;
-                });
-            })
+      function applyFilters() 
+      {
+          const filterText = document.getElementById("filter").value.toLowerCase();
+          const sortOrder = document.getElementById("options").value;
+
+          let filtered_products = original_products.filter(product => product.title.toLowerCase().includes(filterText));
+
+          if (sortOrder === "rosnaco") 
+          {
+            filtered_products.sort((a, b) => a.title.localeCompare(b.title));
+          } 
+          
+          else if (sortOrder === "malejaco")
+          {
+            filtered_products.sort((a, b) => b.title.localeCompare(a.title));
+          }
+
+          displayProducts(filtered_products); 
+      }
     </script>
   </body>
 </html>
