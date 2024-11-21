@@ -26,7 +26,8 @@
     document.querySelector(".crosshair").style.display = "block";
     gameCanvas.start();
     hp = 3;
-    points = 0;
+    points = 100;
+    zombies.length = 0; // Resetowanie tablicy zombie
     gameRunning = setInterval(() => spawnZombie(), 1000);
     updateScore();
     updateHp();
@@ -176,7 +177,7 @@
   
     for (let i = zombies.length - 1; i >= 0; i--) {
       if (zombies[i].isClicked(clickX, clickY)) {
-        points += 10;
+        points += 20;
         zombies.splice(i, 1);
         updateScore();
         break;
