@@ -1,246 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gra Zombie</title>
-  <style>
-    canvas 
-    {
-      background-image: url('board-bg.jpg');
-      background-size: cover;
-      background-position: center;
-      width: 100%;
-      height: 100%;
-    }
-
-    .zombie 
-    {
-      position: absolute;
-      width: 200px;
-      height: 312px;
-      background: url("walkingdead.png");
-      background-size: cover;
-    }
-
-    .message 
-    {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      cursor: pointer;
-      font-size: 24px;
-      text-align: center;
-    }
-
-    #hearts img 
-    {
-      width: 40px;
-    }
-
-    .score 
-    {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .hp 
-    {
-      position: absolute;
-      top: 10px;
-      left: 20px;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    #start 
-    {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      font-size: 24px;
-      text-align: center;
-      cursor: pointer;
-      display: block;
-    }
-
-    .crosshair 
-    {
-      position: absolute;
-      display: none; /* Na początku celownik jest ukryty */
-      pointer-events: none; /* Celownik nie będzie przeszkadzał w interakcji z innymi elementami */
-      z-index: 10;
-      transform: translate(-50%, -50%); /* Aby celownik był wyśrodkowany na kursora */
-    }
-
-    .crosshair img 
-    {
-      width: 50px; /* Wymiary celownika */
-      height: 50px;
-    }
-  </style>
+  <title>The Walking Dead</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
-
-<body>
-  <div class="score" id="score">Score: 0</div>
+<body style="background-image: url('board-bg.jpg')">
+  <!-- Wyświetlanie wyniku -->
+  <div class="score" id="score">Score: 00000</div>
+  
+  <!-- Wyświetlanie serc -->
   <div class="hp" id="hearts">
-    <img src="full_heart.png" alt="Heart">
-    <img src="full_heart.png" alt="Heart">
-    <img src="full_heart.png" alt="Heart">
+    <img src="full_heart.png" alt="Heart" id="heart1" />
+    <img src="full_heart.png" alt="Heart" id="heart2" />
+    <img src="full_heart.png" alt="Heart" id="heart3" />
   </div>
-  <div class="crosshair">
-    <img src="aim.png" alt="Crosshair">
-  </div>
-  <div id="start">Start Game</div>
+  
+  <!-- Celownik -->
+  <div id="custom-cursor" class="crosshair"></div>
+  
+  <!-- Ekran startowy -->
+  <div id="start" class="message">Start Game</div>
+  
+  <!-- Płótno -->
   <canvas></canvas>
-
-  <script>
-    let hp = 3;
-    let points = 0;
-    let game_running;
-
-    const zombieDict = {};
-
-    const game_canvas = 
-    {
-      canvas: document.querySelector("canvas"),
-      start: function () 
-      {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        this.context = this.canvas.getContext("2d");
-      }
-    };
-
-    function get_random_int(min, max) 
-    {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function start_game() 
-    {
-      document.getElementById("start").style.display = "none";
-      document.querySelector(".crosshair").style.display = "block"; // Włączamy wyświetlanie celownika
-      game_canvas.start();
-      game_running = setInterval(() => {
-        spawn_zombie();
-      }, 1000);
-      hp = 3;
-      points = 0;
-      update_score();
-      update_hp();
-    }
-
-    function spawn_zombie() 
-    {
-      const speed = get_random_int(2, 5); // Speed of zombie in px per frame
-      const scale = get_random_int(1, 3); // Scaling factor for zombie
-      const bottom = get_random_int(3,30); // Vertical position (in vh)
-
-      let zombie = document.createElement("div");
-      zombie.classList.add("zombie");
-      zombie.style.left = `${window.innerWidth}px`; // Start position off-screen to the right
-      zombie.style.bottom = `${bottom}vh`; // Correct interpolation
-      zombie.style.transform = `scale(${scale})`; // Correct interpolation
-
-      zombie.addEventListener("click", function () {
-        zombie_hit(zombie);
-      });
-
-      document.body.appendChild(zombie);
-
-      animate_zombie(zombie, speed);
-    }
-
-    function animate_zombie(zombie, speed) 
-    {
-      const move = () => 
-      {
-        let currentX = parseFloat(zombie.style.left); // Current X position in pixels
-        currentX -= speed; // Move left by speed
-        zombie.style.left = `${currentX}px`; // Correct interpolation
-
-        if (currentX + zombie.offsetWidth < 0) 
-        {
-          // If zombie has moved off-screen
-          zombie.remove();
-          escaped_zombie();
-        } 
-        else 
-        {
-          requestAnimationFrame(move); // Continue animation
-        }
-      };
-      requestAnimationFrame(move);
-    }
-
-    function zombie_hit(zombie)
-     {
-      zombie.remove();
-      points += 10;
-      update_score();
-    }
-
-    function escaped_zombie()
-     {
-      hp--;
-      update_hp();
-      if (hp <= 0) 
-      {
-        end_game();
-      }
-    }
-
-    function update_score() 
-    {
-      let result = `${points}`;
-      while (result.length < 5) result = `0${result}`;
-      document.querySelector(".score").innerText = result;
-    }
-
-    function update_hp() 
-    {
-      let hearts = document.querySelector(".hp");
-      hearts.innerHTML = "";
-      for (let i = 0; i < hp; i++) 
-      {
-        let heart = document.createElement("img");
-        heart.src = "full_heart.png";
-        heart.alt = "Heart";
-        hearts.appendChild(heart);
-      }
-    }
-
-    function end_game() 
-    {
-      clearInterval(game_running);
-      document.getElementById("start").textContent = "Game Over! Restart?";
-      document.getElementById("start").style.display = "block";
-      update_hp();
-      document.querySelector(".crosshair").style.display = "none";
-    }
-
-    // Obsługuje ruch celownika
-    document.addEventListener("mousemove", (event) => {
-      const customCursor = document.querySelector(".crosshair");
-      customCursor.style.left = `${event.clientX}px`;
-      customCursor.style.top = `${event.clientY}px`;
-    });
-
-    document.getElementById("start").addEventListener("click", start_game);
-  </script>
 </body>
 </html>
