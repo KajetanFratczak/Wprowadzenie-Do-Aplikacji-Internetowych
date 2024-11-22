@@ -1,5 +1,5 @@
-/* Styl dla ciała */
-body {
+body
+{
   cursor: auto;
   background-size: cover;
   background-repeat: no-repeat;
@@ -10,8 +10,8 @@ body {
   overflow: hidden;
 }
 
-/* Płótno */
-canvas {
+canvas
+{
   display: block;
   width: 100vw;
   height: 100vh;
@@ -20,8 +20,8 @@ canvas {
   background-position: center;
 }
 
-/* Zombie */
-.zombie {
+.zombie
+{
   position: absolute;
   width: 200px;
   height: 312px;
@@ -29,8 +29,8 @@ canvas {
   background-size: cover;
 }
 
-/* Wynik */
-.score {
+.score
+{
   position: absolute;
   top: 10px;
   right: 20px;
@@ -39,8 +39,8 @@ canvas {
   font-weight: bold;
 }
 
-/* Serca */
-.hp {
+.hp
+{
   position: absolute;
   top: 10px;
   left: 20px;
@@ -48,13 +48,14 @@ canvas {
   gap: 5px;
 }
 
-.hp img {
+.hp img
+{
   width: 40px;
   height: 40px;
 }
 
-/* Przycisk Start */
-.message {
+.message
+{
   position: absolute;
   top: 50%;
   left: 50%;
@@ -69,8 +70,8 @@ canvas {
   z-index: 20;
 }
 
-/* Celownik */
-.crosshair {
+.crosshair
+{
   position: absolute;
   width: 50px;
   height: 50px;
