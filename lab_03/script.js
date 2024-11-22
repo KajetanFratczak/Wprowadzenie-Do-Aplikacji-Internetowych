@@ -1,6 +1,7 @@
   let hp = 3;
   let points = 100;
   let gameRunning = true;
+  let gameOverMusic = null;
   
   const zombies = []; // Przechowuje wszystkie zombie
   const gameCanvas = {
@@ -20,17 +21,31 @@
   }
   
   // Rozpoczęcie gry
-  function startGame()
-   {
+  function startGame() {
+    // Zatrzymanie muzyki z gry over
+    if (gameOverMusic) {
+      gameOverMusic.pause();
+      gameOverMusic.currentTime = 0; // Resetowanie dźwięku
+      gameOverMusic = null;
+    }
+  
+    // Resetowanie interfejsu i zmiennych gry
     document.getElementById("start").style.display = "none";
     document.querySelector(".crosshair").style.display = "block";
     gameCanvas.start();
     hp = 3;
     points = 100;
     zombies.length = 0; // Resetowanie tablicy zombie
-    gameRunning = setInterval(() => spawnZombie(), 1000);
     updateScore();
     updateHp();
+  
+    // Restart animacji i logiki
+    if (gameRunning) clearInterval(gameRunning);
+    gameRunning = setInterval(() => spawnZombie(), 1000);
+    requestAnimationFrame(animate);
+  
+    // Przywrócenie możliwości klikania w canvas
+    gameCanvas.canvas.style.pointerEvents = "auto";
   }
   
   // Zombie jako klasa
@@ -119,24 +134,22 @@
   }
   
   // Animacja gry
-  function animate() 
-  {
-    if (!gameRunning) return;
+  function animate() {
+    if (!gameRunning) return; // Sprawdzanie, czy gra trwa
   
     const context = gameCanvas.context;
     context.clearRect(0, 0, gameCanvas.canvas.width, gameCanvas.canvas.height);
   
-    for (let i = zombies.length - 1; i >= 0; i--) 
-    {
+    for (let i = zombies.length - 1; i >= 0; i--) {
       const zombie = zombies[i];
       zombie.update();
   
       // Jeśli zombie wychodzi poza ekran
-      if (zombie.isOutOfScreen()) 
-      {
+      if (zombie.isOutOfScreen()) {
         zombies.splice(i, 1);
         loseHp();
         if (hp <= 0) {
+          endGame();
           return;
         }
       }
@@ -171,18 +184,29 @@
   // Obsługa kliknięcia w zombie
   gameCanvas.canvas.addEventListener("click", (e) =>
   {
+    if (points <= 0) return; // Uniemożliwia strzał przy zerowych punktach
+
     const rect = gameCanvas.canvas.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
     const clickY = e.clientY - rect.top;
+    let hit = false;
   
     for (let i = zombies.length - 1; i >= 0; i--) {
       if (zombies[i].isClicked(clickX, clickY)) {
         points += 20;
         zombies.splice(i, 1);
-        updateScore();
+        hit = true; // Zombie zostało trafione
         break;
       }
     }
+
+    if (!hit) {
+      points -= 5; // Odejmowanie punktów za niecelny strzał
+      if (points < 0) points = 0; // Ustaw punktację minimalną na 0
+    }
+
+    updateScore();
+
   });
   
   // Utrata życia
@@ -193,12 +217,20 @@
   }
   
   // Zakończenie gry
-  function endGame()
-  {
+  function endGame() {
     clearInterval(gameRunning);
+    gameRunning = null; // Zatrzymanie interwału
     document.getElementById("start").textContent = "Game Over! Restart?";
     document.getElementById("start").style.display = "block";
     document.querySelector(".crosshair").style.display = "none";
+    gameCanvas.canvas.style.pointerEvents = "none"; // Wyłącza możliwość klikania
+  
+    // Odtwarzanie muzyki po przegranej
+    if (!gameOverMusic) {
+      gameOverMusic = new Audio("sad-music.mp3");
+      gameOverMusic.loop = true; // Włącz powtarzanie muzyki
+      gameOverMusic.play();
+    }
   }
   
   // Inicjalizacja
