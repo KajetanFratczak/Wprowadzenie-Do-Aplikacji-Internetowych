@@ -38,21 +38,21 @@ function startGame()
   updateHp();
 
   if (gameRunning) clearInterval(gameRunning);
-  gameRunning = setInterval(() => spawnZombie(), 1000);
+  gameRunning = setInterval(() => spawnZombie(), 500);
   requestAnimationFrame(animate);
 
   gameCanvas.canvas.style.pointerEvents = "auto";
 }
 
-
+// inspirowane vertical-platformer z filmu na yt z pdf-a
 class Zombie
 {
   constructor() {
-    this.speed = getRandomInt(2, 10);
-    this.scale = getRandomInt(1, 2);
-    this.bottom = getRandomInt(1, 10);
-    this.width = 200 * this.scale;
-    this.height = 312 * this.scale;
+    this.speed = getRandomInt(2, 4);
+    this.scale = getRandomInt(1, 3);
+    this.bottom = getRandomInt(1, 50);
+    this.width = 200 / this.scale;
+    this.height = 312 / this.scale;
     this.x = window.innerWidth;
     this.y = window.innerHeight - this.height - this.bottom * (window.innerHeight / 100);
     
@@ -117,7 +117,6 @@ class Zombie
     );
   }
 }
-
 
 function spawnZombie() 
 {
