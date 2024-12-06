@@ -1,35 +1,37 @@
 const express = require('express');
-const { Book } = require('../models');
 const router = express.Router();
+const { Book } = require('../models');
 
-// Pobranie wszystkich książek
+// Pobierz wszystkie książki
 router.get('/', async (req, res) => {
     const books = await Book.findAll();
     res.json(books);
 });
 
-// Pobranie konkretnej książki
+// Pobierz książkę po ID
 router.get('/:id', async (req, res) => {
     const book = await Book.findByPk(req.params.id);
     if (!book) return res.status(404).json({ error: 'Book not found' });
     res.json(book);
 });
 
-// Dodanie nowej książki
+// Dodaj książkę
 router.post('/', async (req, res) => {
+    const { title, author, year } = req.body;
     try {
-        const book = await Book.create(req.body);
+        const book = await Book.create({ title, author, year });
         res.status(201).json(book);
     } catch (err) {
-        res.status(400).json({ error: 'Invalid data' });
+        res.status(400).json({ error: err.message });
     }
 });
 
-// Usunięcie książki
+// Usuń książkę
 router.delete('/:id', async (req, res) => {
-    const deleted = await Book.destroy({ where: { id: req.params.id } });
-    if (!deleted) return res.status(404).json({ error: 'Book not found' });
-    res.status(204).send();
+    const book = await Book.findByPk(req.params.id);
+    if (!book) return res.status(404).json({ error: 'Book not found' });
+    await book.destroy();
+    res.json({ message: 'Book deleted' });
 });
 
 module.exports = router;
