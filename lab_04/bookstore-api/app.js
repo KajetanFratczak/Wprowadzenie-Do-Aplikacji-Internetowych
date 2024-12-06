@@ -7,12 +7,10 @@ const userRoutes = require('./routes/users');
 const app = express();
 app.use(express.json());
 
-// Trasy
 app.use('/api/books', bookRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', userRoutes);
 
-// Uruchomienie serwera
 const PORT = 3000;
 sequelize.sync({ force: true }).then(() => {
     console.log('Database synced');
